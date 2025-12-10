@@ -19,8 +19,8 @@ The system uses a layered architecture (Clean Architecture) using FastAPI and SQ
 ## How to Run
 
 ### Option 1: Docker (Recommended)
-1. Ensure Docker is installed.
-2. Run `docker-compose up --build`.
+1. Ensure Docker is installed. Docker Desktop download + install from docker.com
+2. Run `docker-compose up --build`. Check that you are in the correct folder inside your terminal ...\price_checker_backend\ before running this command.
 3. Open `http://localhost:8000/docs` to see the Swagger UI.
 
 ### Option 2: Local
