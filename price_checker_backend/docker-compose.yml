@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./sql_app.db
+      - SECRET_KEY=changethissecuresecretkeyinproduction
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    volumes:
+      - .:/app
+    depends_on:
+      - db  # Optional if using SQLite, but good for architecture demonstration
+
+  # Service placeholder for MySQL/MariaDB as requested by customer
+  # Currently configured to use SQLite for instant portability/demo without setup
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pricechecker
+    ports:
+      - "5432:5432"
