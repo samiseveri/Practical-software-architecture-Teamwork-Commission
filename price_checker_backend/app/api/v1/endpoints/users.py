@@ -14,6 +14,11 @@ def create_user(
     db: Session = Depends(deps.get_db),
     user_in: UserCreate,
 ) -> Any:
+    """
+    Create a new user account.
+    - Checks if a user with the given email already exists
+    - Creates and returns the new user
+    """
     user = crud_user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(status_code=400, detail="The user with this email already exists in the system.")
@@ -27,6 +32,11 @@ def read_users(
     limit: int = 100,
     current_user: User = Depends(deps.get_current_admin),
 ) -> Any:
+    """
+    Retrieve a list of users.
+    - Accessible only by admin users
+    - Supports pagination via skip and limit parameters
+    """
     users = crud_user.get_multi(db, skip=skip, limit=limit)
     return users
 
@@ -37,6 +47,11 @@ def update_user_status(
     db: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_admin),
 ) -> Any:
+    """
+    Update an existing user's information or status.
+    - Accessible only by admin users
+    - Returns the updated user
+    """
     user = crud_user.get(db, id=user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -49,6 +64,11 @@ def delete_user(
     db: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_admin),
 ) -> Any:
+    """
+    Delete a user from the system.
+    - Accessible only by admin users
+    - Returns the deleted user
+    """
     user = crud_user.get(db, id=user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
