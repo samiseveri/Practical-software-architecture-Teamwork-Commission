@@ -17,6 +17,11 @@ def add_reduction(
     reduction_in: ReductionCreate,
     current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
+    """
+    Create a new reduction entry for a store user.
+    - Only users with the role `store_user` are allowed
+    - The reduction is automatically associated with the current store
+    """
     if current_user.role != "store_user":
          raise HTTPException(status_code=400, detail="Only store users can add reductions")
     
@@ -30,6 +35,7 @@ def batch_upload_prices(
     batch: PriceBatch,
     current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
+    # Ensures that only store users can upload batches
     if current_user.role != "store_user":
          raise HTTPException(status_code=400, detail="Only store users can upload batches")
          
@@ -39,6 +45,7 @@ def batch_upload_prices(
         if current_user.latitude and current_user.longitude:
             item.latitude = float(current_user.latitude)
             item.longitude = float(current_user.longitude)
+        #Creates price entry in the database
         price_entry.create(db, obj_in=item)
         count += 1
     return {"message": f"Successfully processed {count} items"}

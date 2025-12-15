@@ -19,6 +19,12 @@ def get_db() -> Generator:
         db.close()
 
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
+    """
+    Retrieve the currently authenticated user based on a JWT access token.
+    - Decodes and validates the JWT
+    - Extracts the user email from the token subject (`sub`)
+    - Loads the corresponding user from the database
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
